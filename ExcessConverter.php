@@ -12,9 +12,9 @@
 
 class ExcessConverter
 {
-    const RETURN_ARRAY_DEC;
-    const RETURN_ARRAY_HEX;
-    const RETURN_ASCII;
+    const RETURN_ARRAY_HEX = 0;
+    const RETURN_ARRAY_DEC = 1;
+    const RETURN_ASCII = 2;
     
     public static function convert($num, $return_type = self::RETURN_ARRAY_HEX)
     {
