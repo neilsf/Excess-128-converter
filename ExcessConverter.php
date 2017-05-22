@@ -22,11 +22,6 @@ class ExcessConverter
         {
             throw new \Exception("Wrong return type specified");
         }
-        
-        if(bccomp(-1.70141183e+38, $num) == 1 || bccomp(1.70141183e+38 , $num) == -1)
-        {
-            throw new \Exception("Number is out of range");
-        }
                 
         $negative = $num < 0;
         $num = abs($num);
@@ -64,9 +59,6 @@ class ExcessConverter
                 return [dechex($exponent), base_convert($m4, 2, 16), base_convert($m3, 2, 16), base_convert($m2, 2, 16), base_convert($m1, 2, 16)];        
                 break;
         }
-        
-        
-        
     }
 
     private static function _fdecbin($fraction)
