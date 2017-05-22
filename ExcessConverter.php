@@ -12,8 +12,22 @@
 
 class ExcessConverter
 {
-    public static function convert($num)
+    const RETURN_ARRAY_DEC;
+    const RETURN_ARRAY_HEX;
+    const RETURN_ASCII;
+    
+    public static function convert($num, $return_type = self::RETURN_ARRAY_HEX)
     {
+        if(!in_array($return_type, array(self::RETURN_ARRAY_DEC, self::RETURN_ARRAY_HEX, self::RETURN_ASCII)))
+        {
+            throw new \Exception("Wrong return type specified");
+        }
+        
+        if(bccomp(-1.70141183e+38, $num) == 1 || bccomp(1.70141183e+38 , $num) == -1)
+        {
+            throw new \Exception("Number is out of range");
+        }
+                
         $negative = $num < 0;
         $num = abs($num);
 
@@ -35,7 +49,24 @@ class ExcessConverter
         $m2 = substr($mantissa, 16, 8);
         $m1 = substr($mantissa, 24, 8);
 
-        return [dechex($exponent), base_convert($m4, 2, 16), base_convert($m3, 2, 16), base_convert($m2, 2, 16), base_convert($m1, 2, 16)];
+        switch($return_type)
+        {
+            case self::RETURN_ARRAY_DEC:
+                return [$exponent, bindec($m4), bindec($m3), bindec($m2), bindec($m1)];        
+                break;
+        
+            case self::RETURN_ASCII:
+                return chr($exponent).chr($m4).chr($m3).chr($m2).chr($m1);
+                break;
+                
+            case self::RETURN_ARRAY_HEX:
+            default:
+                return [dechex($exponent), base_convert($m4, 2, 16), base_convert($m3, 2, 16), base_convert($m2, 2, 16), base_convert($m1, 2, 16)];        
+                break;
+        }
+        
+        
+        
     }
 
     private static function _fdecbin($fraction)
